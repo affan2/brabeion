@@ -4,9 +4,10 @@ from .signals import badge_awarded
 
 
 class BadgeAwarded(object):
-    def __init__(self, level=None, user=None):
+    def __init__(self, level=None, user=None, points_at=0):
         self.level = level
         self.user = user
+        self.points_at = points_at
 
 
 class BadgeDetail(object):
@@ -23,13 +24,13 @@ class BadgeDetail(object):
 
 class Badge(object):
     async = False
-    
+
     def __init__(self):
         assert not (self.multiple and len(self.levels) > 1)
         for i, level in enumerate(self.levels):
             if not isinstance(level, BadgeDetail):
                 self.levels[i] = BadgeDetail(level)
-    
+
     def possibly_award(self, **state):
         """
         Will see if the user should be awarded a badge.  If this badge is
@@ -51,7 +52,7 @@ class Badge(object):
             AsyncBadgeAward.delay(self, state)
             return
         self.actually_possibly_award(**state)
-    
+
     def actually_possibly_award(self, **state):
         """
         Does the actual work of possibly awarding a badge.
@@ -72,10 +73,15 @@ class Badge(object):
         extra_kwargs = {}
         if force_timestamp is not None:
             extra_kwargs["awarded_at"] = force_timestamp
-        badge = BadgeAward.objects.create(user_id=user_id, slug=self.slug,
-            level=awarded.level, **extra_kwargs)
+        badge = BadgeAward.objects.create(
+            user_id=user_id,
+            slug=self.slug,
+            level=awarded.level,
+            points_at=awarded.points_at,
+            **extra_kwargs
+        )
         badge_awarded.send(sender=self, badge_award=badge)
-    
+
     def freeze(self, **state):
         return state
 
