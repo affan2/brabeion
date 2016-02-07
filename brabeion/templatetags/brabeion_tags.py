@@ -1,4 +1,5 @@
 from django import template
+from django.utils.translation import ugettext_lazy as _
 
 from ..models import BadgeAward
 from brabeion import badges
@@ -120,7 +121,7 @@ class RequiredBadgesForUserLevelUpNode(template.Node):
             except BadgeAward.DoesNotExist:
                 #TODO: standardise indexes
                 # decrement to get the NEXT levels require badge because 0-indexed 1-indexed
-                return_val = '%s badge required' % badges._registry[required_badge[0]].levels[required_badge[1] - 1]
+                return_val = _('%s badge required') % badges._registry[required_badge[0]].levels[required_badge[1] - 1]
             except BadgeAward.MultipleObjectsReturned:
                 pass
 
