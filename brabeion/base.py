@@ -1,6 +1,7 @@
 from .models import BadgeAward
 from .signals import badge_awarded
 
+from django.conf import settings
 
 
 class BadgeAwarded(object):
@@ -68,7 +69,12 @@ class Badge(object):
             assert len(self.levels) == 1
             awarded.level = 1
         if (not self.multiple and
-            BadgeAward.objects.filter(user__pk=user_id, slug=self.slug, level=awarded.level)):
+            BadgeAward.objects.filter(
+                user__pk=user_id,
+                slug=self.slug,
+                level=awarded.level,
+                site_id=settings.SITE_ID
+            )):
             return
         extra_kwargs = {}
         if force_timestamp is not None:
@@ -78,6 +84,7 @@ class Badge(object):
             slug=self.slug,
             level=awarded.level,
             points_at=awarded.points_at,
+            site_id=settings.SITE_ID,
             **extra_kwargs
         )
         badge_awarded.send(sender=self, badge_award=badge)
