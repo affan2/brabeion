@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from ..models import BadgeAward
@@ -27,7 +28,10 @@ class BadgeCountNode(template.Node):
 
     def render(self, context):
         user = self.user.resolve(context)
-        badge_count = BadgeAward.objects.filter(user=user).count()
+        badge_count = BadgeAward.objects.filter(
+            user=user,
+            site_id=settings.SITE_ID
+        ).count()
         if self.context_var is not None:
             context[self.context_var] = badge_count
             return ""
@@ -68,8 +72,7 @@ class BadgesForUserNode(template.Node):
     def render(self, context):
         user = self.user.resolve(context)
         slug = self.slug
-
-        filters = {'user': user}
+        filters = {'user': user, 'site_id': settings.SITE_ID}
         excludes = {}
         order_by = "-awarded_at"
         if not slug == '':
@@ -115,7 +118,12 @@ class RequiredBadgesForUserLevelUpNode(template.Node):
 
         return_val = '0 points'
         for required_badge in next_level.required_badges:
-            filters = {'user': user, 'slug': required_badge[0], 'level': required_badge[1]}
+            filters = {
+                'user': user,
+                'slug': required_badge[0],
+                'level': required_badge[1],
+                'site_id': settings.SITE_ID
+            }
             try:
                 BadgeAward.objects.get(**filters)
             except BadgeAward.DoesNotExist:

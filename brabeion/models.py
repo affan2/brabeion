@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.sites.models import Site
 
 from django.conf import settings
 
@@ -6,12 +7,15 @@ from django.utils import timezone
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
+
 class BadgeAward(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, related_name="badges_earned")
     awarded_at = models.DateTimeField(default=timezone.now)
     slug = models.CharField(max_length=255)
     level = models.IntegerField()
     points_at = models.IntegerField(default=0)
+    site = models.ForeignKey(Site, default=settings.SITE_ID,
+        verbose_name='site')
 
     def __unicode__(self):
         return u'%s (%s) awarded to %s' % (self.slug, self.level, self.user)
