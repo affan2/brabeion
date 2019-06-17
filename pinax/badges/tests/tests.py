@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.test import TestCase
 
-from pinax.badges.base import Badge, BadgeAwarded
-from pinax.badges.registry import badges
-from pinax.badges.templatetags import pinax_badges_tags
+from ..base import Badge, BadgeAwarded
+from ..registry import badges
+from ..templatetags import pinax_badges_tags
 
 from .models import PlayerStat
 

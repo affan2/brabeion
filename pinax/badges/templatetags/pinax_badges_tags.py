@@ -1,6 +1,6 @@
 from django import template
 
-from pinax.badges.models import BadgeAward
+from ..models import BadgeAward
 
 register = template.Library()
 
