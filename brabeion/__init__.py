@@ -1,1 +1,0 @@
-from .internals import badges
