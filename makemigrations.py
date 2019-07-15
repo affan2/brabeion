@@ -12,8 +12,8 @@ DEFAULT_SETTINGS = dict(
         "django.contrib.auth",
         "django.contrib.contenttypes",
         "django.contrib.sites",
-        "pinax.badges",
-        "pinax.badges.tests"
+        "phileo.badges",
+        "phileo.badges.tests"
     ],
     MIDDLEWARE_CLASSES=[],
     DATABASES={
@@ -23,7 +23,7 @@ DEFAULT_SETTINGS = dict(
         }
     },
     SITE_ID=1,
-    ROOT_URLCONF="pinax.badges.tests.urls",
+    ROOT_URLCONF="phileo.badges.tests.urls",
     SECRET_KEY="notasecret",
 )
 

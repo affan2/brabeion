@@ -12,8 +12,8 @@ DEFAULT_SETTINGS = dict(
         "django.contrib.auth",
         "django.contrib.contenttypes",
         "django.contrib.sites",
-        "pinax.badges",
-        "pinax.badges.tests"
+        "phileo.badges",
+        "phileo.badges.tests"
     ],
     DATABASES={
         "default": {
@@ -22,7 +22,7 @@ DEFAULT_SETTINGS = dict(
         }
     },
     SITE_ID=1,
-    ROOT_URLCONF="pinax.badges.tests.urls",
+    ROOT_URLCONF="phileo.badges.tests.urls",
     SECRET_KEY="notasecret",
 )
 
@@ -41,7 +41,7 @@ def runtests(*test_args):
     try:
         from django.test.runner import DiscoverRunner
         runner_class = DiscoverRunner
-        test_args = ["pinax.badges.tests"]
+        test_args = ["phileo.badges.tests"]
     except ImportError:
         from django.test.simple import DjangoTestSuiteRunner
         runner_class = DjangoTestSuiteRunner

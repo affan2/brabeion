@@ -85,7 +85,7 @@ Add `pinax.badges.urls` to your project urlpatterns:
 ```python
     urlpatterns = [
         # other urls
-        url(r"^badges/", include("pinax.badges.urls", namespace="pinax_badges")),
+        url(r"^badges/", include(phileo, namespace="pinax_badges")),
     ]
 ```
 

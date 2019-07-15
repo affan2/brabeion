@@ -29,7 +29,7 @@ def badge_list(request):
     for badge_group in badges_dict.values():
         badge_group.sort(key=lambda o: o["level"])
 
-    return render(request, "pinax/badges/badges.html", {
+    return render(request, "phileo/badges/badges.html", {
         "badges": sorted(badges_dict.items()),
     })
 
@@ -44,7 +44,7 @@ def badge_detail(request, slug, level):
     badge_count = badge_awards.count()
     latest_awards = badge_awards[:50]
 
-    return render(request, "pinax/badges/badge_detail.html", {
+    return render(request, "phileo/badges/badge_detail.html", {
         "badge": badge,
         "badge_count": badge_count,
         "latest_awards": latest_awards,
