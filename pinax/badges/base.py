@@ -1,6 +1,8 @@
 from .models import BadgeAward
 from .signals import badge_awarded
 
+from django.conf import settings
+
 
 def abstract_property(name):
     def attr(*args):
@@ -11,15 +13,22 @@ def abstract_property(name):
 
 
 class BadgeAwarded(object):
-    def __init__(self, level=None, user=None):
+    def __init__(self, level=None, user=None, points_at=0):
         self.level = level
         self.user = user
+        self.points_at = points_at
 
 
 class BadgeDetail(object):
-    def __init__(self, name=None, description=None):
+    def __init__(self, name=None, description=None, **kwargs):
         self.name = name
         self.description = description
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def __repr__(self):
+        return str(self.name)
 
 
 class Badge(object):
@@ -67,7 +76,7 @@ class Badge(object):
         assert awarded < len(self.levels)
         if (
                 not self.multiple and
-                BadgeAward.objects.filter(user=user, slug=self.slug, level=awarded)
+                BadgeAward.objects.filter(user=user, slug=self.slug, level=awarded, site_id=settings.SITE_ID,)
         ):
             return
         extra_kwargs = {}
@@ -77,6 +86,8 @@ class Badge(object):
             user=user,
             slug=self.slug,
             level=awarded,
+            points_at=awarded.points_at,
+            site_id=settings.SITE_ID,
             **extra_kwargs
         )
         self.send_badge_messages(badge)
