@@ -35,6 +35,7 @@ class Badge(object):
     async_ = False
     multiple = abstract_property("multiple")
     levels = abstract_property("levels")
+    events = abstract_property("events")
     slug = abstract_property("slug")
 
     def award(self, **state):
