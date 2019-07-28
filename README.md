@@ -65,7 +65,7 @@ Django \ Python | 2.7 | 3.4 | 3.5 | 3.6
 
 ### Installation
 
-Install the development version:
+To install pinax-badges:
 
 ```shell
     $ pip install pinax-badges
@@ -155,7 +155,7 @@ be `False`.
 ##### `award(self, **state)`
 
 This method returns whether or not a user should be awarded this badge.
-`state` is guarnteed to have a `"user"` key, as well as any other
+`state` is guaranteed to have a `"user"` key, as well as any other
 custom data you provide.  It should return either a `BadgeAwarded`
 instance, or `None`.  If this `Badge` doesn't have multiple levels
 `BadgeAwarded` doesn't need to be provided an explicit level.
@@ -180,7 +180,7 @@ to the user:
         # more view
 ```
 
-By default badges will be awarded at the current time, if you need to overide
+By default badges will be awarded at the current time, if you need to override
 the award time of the badge you can pass a `force_timestamp` keyword argument
 to `possibly_award_badge()`.
 
@@ -192,7 +192,7 @@ to `possibly_award_badge()`.
 
 If your `Badge.award()` method takes a long time to compute it may be
 prohibitively expensive to call during the request/response cycle.  To solve
-this problem Pinax Badges provides an `async` option to `Badges`.  If this
+this problem Pinax Badges provides an `async_` option to `Badges`.  If this
 is `True` Pinax Badges will defer calling your `award()` method, using
 `celery`, and it will be called at a later time, by another process (read the
 [celery docs](http://celeryproject.org/docs/) for more information on how
@@ -206,7 +206,7 @@ requires some mutable state.
 ```python
     class AddictBadge(Badge):
         # stuff
-        async = True
+        async_ = True
 
         def freeze(self, **state):
             state["current_day"] = datetime.today()
@@ -230,7 +230,7 @@ additional state to the `award()` method.
 * `awarded_at` - The `datetime` that this badge was awarded at.
 * `slug` - The slug for the `Badge` that this refers to.
 * `name` - The name for the `Badge` this refers to, for the appropriate level.
-* `description` - The description for the `Badge` thsi refers to, for the appropriate level.
+* `description` - The description for the `Badge` this refers to, for the appropriate level.
 
 ### Signals
 
@@ -247,7 +247,7 @@ single argument, `badge`, which is an instance of `pinax.badges.models.BadgeAwar
 
 #### Module: `pinax.badges.templatetags.pinax_badges_tags`
 
-`pinax-badges` offers a number of templatetags for your convenience, which are
+`pinax-badges` offers a number of template tags for your convenience, which are
 available in the `pinax_badges_tags` library.
 
 ##### `badge_count`
@@ -312,6 +312,10 @@ Context data:
 
 
 ## Change Log
+
+### 2.0.1
+
+* Change Badge.async attribute to Badge.async_ since async is now a keyword in Python 3.7. This was implemented in a backwards compatible way so Badge.async is still valid in older Python versions.
 
 ### 2.0.0
 
