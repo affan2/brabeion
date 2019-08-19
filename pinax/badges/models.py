@@ -17,7 +17,7 @@ class BadgeAward(models.Model):
     site = models.ForeignKey(Site, default=settings.SITE_ID,
                              verbose_name='site')
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s (%s) awarded to %s' % (self.slug, self.level, self.user)
 
     def __getattr__(self, attr):
