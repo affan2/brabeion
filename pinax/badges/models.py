@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.sites.models import Site
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 
 from django.utils import timezone
 
@@ -15,7 +17,7 @@ class BadgeAward(models.Model):
     level = models.IntegerField()
     points_at = models.IntegerField(default=0)
     site = models.ForeignKey(Site, default=settings.SITE_ID,
-                             verbose_name='site')
+                             verbose_name='site', on_delete=models.CASCADE)
 
     def __str__(self):
         return '%s (%s) awarded to %s' % (self.slug, self.level, self.user)

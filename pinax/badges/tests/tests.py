@@ -1,5 +1,7 @@
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
+# from django.contrib.auth.models import User
 from django.db import connection
 from django.test import TestCase
 
@@ -48,7 +50,7 @@ class BaseTestCase(TestCase):
 
 class BadgesTests(BaseTestCase):
     def test_award(self):
-        u = User.objects.create_user("Lars Bak", "lars@hotspot.com", "x864lyfe")
+        u = get_user_model().objects.create_user("Lars Bak", "lars@hotspot.com", "x864lyfe")
         PlayerStat.objects.create(user=u)
         badges.possibly_award_badge("points_awarded", user=u)
         self.assertEqual(u.badges_earned.count(), 0)
@@ -67,7 +69,7 @@ class BadgesTests(BaseTestCase):
         self.assertEqual(u.badges_earned.count(), 2)
 
     def test_lazy_user(self):
-        u = User.objects.create_user("Lars Bak", "lars@hotspot.com", "x864lyfe")
+        u = get_user_model().objects.create_user("Lars Bak", "lars@hotspot.com", "x864lyfe")
         PlayerStat.objects.create(user=u, points=5001)
         badges.possibly_award_badge("points_awarded", user=u)
         self.assertEqual(u.badges_earned.count(), 1)
@@ -91,7 +93,7 @@ class BadgesTests(BaseTestCase):
 class TemplateTagsTests(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user("Lars Bak", "lars@hotspot.com", "x864lyfe")
+        self.user = get_user_model().objects.create_user("Lars Bak", "lars@hotspot.com", "x864lyfe")
         PlayerStat.objects.create(user=self.user)
         self.user.stats.points += 5001
         self.user.stats.save()

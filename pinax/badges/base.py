@@ -2,6 +2,8 @@ from .models import BadgeAward
 from .signals import badge_awarded
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 
 
 def abstract_property(name):
