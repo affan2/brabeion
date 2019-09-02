@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        migrations.swappable_dependency(get_user_model()),
+        migrations.swappable_dependency(get_user_model().__name__),
     ]
 
     operations = [
