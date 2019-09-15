@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.conf.urls import re_path
 
 from .views import badge_detail, badge_list
 
 app_name = "pinax_badges"
 
 urlpatterns = [
-    url(r"^$", badge_list, name="badge_list"),
-    url(r"^(\w+)/(\d+)/$", badge_detail, name="badge_detail"),
+    re_path(r"^$", badge_list, name="badge_list"),
+    re_path(r"^(\w+)/(\d+)/$", badge_detail, name="badge_detail"),
 ]
