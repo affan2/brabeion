@@ -17,6 +17,9 @@ class BadgeAward(models.Model):
     site = models.ForeignKey(Site, default=settings.SITE_ID,
                              verbose_name='site', on_delete=models.CASCADE)
 
+    class Meta:
+        db_table = 'brabeion_badgeaward'
+
     def __str__(self):
         return '%s (%s) awarded to %s' % (self.slug, self.level, self.user)
 
