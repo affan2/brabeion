@@ -18,14 +18,40 @@ def badge_list(request):
     badges_awarded = BadgeAward.objects.values("slug", "level").annotate(num=Count("pk"))
     badges_dict = defaultdict(list)
     for badge in badges_awarded:
+        name = None
+        description = None
+        image = None
+        points = None
+        points_next = None
+        required_badges = None
+
+        if badge['slug'] in badges._registry:
+            if badge['level'] in badges._registry[badge["slug"]].levels:
+                name = badges._registry[badge["slug"]].levels[badge["level"]].name
+        if badge['slug'] in badges._registry:
+            if badge['level'] in badges._registry[badge["slug"]].levels:
+                description = badges._registry[badge["slug"]].levels[badge["level"]].description
+        if badge['slug'] in badges._registry:
+            if badge['level'] in badges._registry[badge["slug"]].levels:
+                image = badges._registry[badge["slug"]].levels[badge["level"]].image
+        if badge['slug'] in badges._registry:
+            if badge['level'] in badges._registry[badge["slug"]].levels:
+                points = badges._registry[badge["slug"]].levels[badge["level"]].points
+        if badge['slug'] in badges._registry:
+            if badge['level'] in badges._registry[badge["slug"]].levels:
+                points_next = badges._registry[badge["slug"]].levels[badge["level"]].points_next
+        if badge['slug'] in badges._registry:
+            if badge['level'] in badges._registry[badge["slug"]].levels:
+                required_badges = badges._registry[badge["slug"]].levels[badge["level"]].required_badges
+
         badges_dict[badge["slug"]].append({
             "level": badge["level"],
-            "name": badges._registry[badge["slug"]].levels[badge["level"]].name,
-            "description": badges._registry[badge["slug"]].levels[badge["level"]].description,
-            "image": badges._registry[badge["slug"]].levels[badge["level"]].image,
-            "points": badges._registry[badge["slug"]].levels[badge["level"]].points,
-            "points_next": badges._registry[badge["slug"]].levels[badge["level"]].points_next,
-            "required_badges": badges._registry[badge["slug"]].levels[badge["level"]].required_badges,
+            "name": name,
+            "description": description,
+            "image": image,
+            "points": points,
+            "points_next": points_next,
+            "required_badges": required_badges,
             "count": badge["num"],
             "user_has": (badge["slug"], badge["level"]) in user_badges
         })
@@ -39,7 +65,10 @@ def badge_list(request):
 
 
 def badge_detail(request, slug, level):
-    badge = badges._registry[slug].levels[int(level)]
+    if slug in badges._registry:
+        if int(level) in badges._registry[slug].levels:
+            badge = badges._registry[slug].levels[int(level)]
+    # badge = badges._registry[slug].levels[int(level)]
     badge_awards = BadgeAward.objects.filter(
         slug=slug,
         level=level

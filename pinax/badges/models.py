@@ -24,7 +24,7 @@ class BadgeAward(models.Model):
         return '%s (%s) awarded to %s' % (self.slug, self.level, self.user)
 
     def __getattr__(self, attr):
-        return getattr(self._badge, attr)
+        return getattr(self._badge, attr) if self._badge is not None else None
 
     @property
     def badge(self):
@@ -33,7 +33,7 @@ class BadgeAward(models.Model):
     @property
     def _badge(self):
         from .registry import badges
-        return badges._registry[self.slug]
+        return badges._registry[self.slug] if self.slug in badges._registry else None
 
     @property
     def name(self):
@@ -41,10 +41,12 @@ class BadgeAward(models.Model):
 
     @property
     def description(self):
-        return self._badge.levels[self.level].description
+        return self._badge.levels[self.level].description if self._badge is not None else None
 
     @property
     def image(self):
+        if self._badge is None:
+            return False
         image = self._badge.levels[self.level].image
         if image != '':
             return '%sbadges/128/%s' % (settings.STATIC_URL, self._badge.levels[self.level - 1].image)
@@ -53,16 +55,16 @@ class BadgeAward(models.Model):
 
     @property
     def points(self):
-        return self._badge.levels[self.level].points
+        return self._badge.levels[self.level].points if self._badge is not None else None
 
     @property
     def points_next(self):
-        return self._badge.levels[self.level].points_next
+        return self._badge.levels[self.level].points_next if self._badge is not None else None
 
     @property
     def required_badges(self):
-        return self._badge.levels[self.level].required_badges
+        return self._badge.levels[self.level].required_badges if self._badge is not None else None
 
     @property
     def progress(self):
-        return self._badge.progress(self.user, self.level)
+        return self._badge.progress(self.user, self.level) if self._badge is not None else None
